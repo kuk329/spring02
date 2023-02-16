@@ -9,7 +9,10 @@ import hello.core.member.MemberServiceImpl;
 import hello.core.member.MemoryMemberRepository;
 import hello.core.order.OrderService;
 import hello.core.order.OrderServiceImpl;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class AppConfig { // 공연 기획자 역할
     // 관심사의 분리 : 객체를 생성하고 연결하는 역할과 실행하는 역할이 명확히 분리되었다.
     // IoC(Inversion of Control) : 제어의 역전
@@ -17,18 +20,22 @@ public class AppConfig { // 공연 기획자 역할
     // 이제 AppConfig가 가져간다. ex) OrderServiceImpl 은 필요한 인터페이스들을 호출하지만 어떤 구현 객체들이
     // 실행될지 모른다.
 
+   @Bean
     public MemberService memberService(){
         return new MemberServiceImpl(memberRepository());
     }
 
-    private MemberRepository memberRepository() {
+    @Bean
+    public MemberRepository memberRepository() {
         return new MemoryMemberRepository(); // 구체 class
     }
 
+    @Bean
     public OrderService orderService(){
         return new OrderServiceImpl(memberRepository(),discountPolicy());
     }
 
+    @Bean
     public DiscountPolicy discountPolicy(){
         return new FixDiscountPolicy(); // 구체 class
     }
